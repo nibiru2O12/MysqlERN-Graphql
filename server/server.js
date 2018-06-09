@@ -6,13 +6,17 @@ const app = express();
 const port = 3000;
 
 const schema = require('./schema/schema');
+const routes = require('./Routes/routes');
 
 app.use(bodyparser.urlencoded({extended:true}));
 app.use(bodyparser.json());
+
 app.use('/graphql',expressGraphQL({
   schema,
   graphiql:true
 }));
+
+app.use('/api',routes);
 
 module.exports = ()=>(
   app.listen(port,()=>{
