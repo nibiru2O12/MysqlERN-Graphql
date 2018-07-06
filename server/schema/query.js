@@ -8,25 +8,43 @@ const {
 } = graphql
 
 const types = require('./types');
-const sampleData = require('../model/sample.json');
+const pool = require('../dbconfig');
 
 const RootQueryType = new GraphQLObjectType({
   name: "RootQuery",
   fields:{
-    sample:{
-      type: types.SampleType,
+    todos:{
+      type: GraphQLList(types.TodoType),
       args: { id: { type: GraphQLInt } },
       resolve(parentValue,args){
-        return sampleData.find(s=>s.id=args.id)
+        return new Promise((resolve,reject)=>{
+          pool.getConnection((err,conn)=>{
+            if(err) reject(err);
+            conn.query('select * from todolist',(err,result)=>{
+              if(err) reject(err);
+              conn.release();
+              resolve(result);
+            })
+          })
+        })
       }
     },
-    samples:{
-      type: GraphQLList(types.SampleType),
-      args:{},
-      resolve(parentValue,args){
-        return sampleData
+    todo:{
+      type: types.TodoType,
+      args: { id: { type: GraphQLInt } },
+      resolve(pv,args){
+        return new Promise((resolve,reject)=>{
+          pool.getConnection((err,conn)=>{
+            if(err) reject(err);
+            conn.query(`select * from todolist where id=${args.id}`,[args.id],(err,result)=>{
+              if(err) reject(err);
+              conn.release();
+              resolve(result[0]);
+            })
+          })
+        });
       }
-    }
+    },
   }
 })
 

@@ -5,14 +5,15 @@ const {
   GraphQLString,
 } = graphql
 
-const SampleType = new GraphQLObjectType({
-  name: "Sample",
+const TodoType = new GraphQLObjectType({
+  name: "Todo",
   fields:{
     id: { type: GraphQLInt },
-    name: { type: GraphQLString }
+    todo: { type: GraphQLString },
+    done: { type: GraphQLInt }
   }
 });
 
 module.exports = {
-  SampleType
+  TodoType
 }
