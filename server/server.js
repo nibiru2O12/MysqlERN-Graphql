@@ -3,7 +3,7 @@ const expressGraphQL = require('express-graphql');
 const bodyparser = require('body-parser');
 
 const app = express();
-const port = 3000;
+const port = 4000;
 
 const schema = require('./schema/schema');
 const routes = require('./Routes/routes');
